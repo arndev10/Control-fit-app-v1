@@ -4,8 +4,8 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BACKEND_DIR="${SCRIPT_DIR}/backend"
 cd "$BACKEND_DIR" || exit 1
-# Asegurar que Python encuentre el módulo "app" (backend/app)
+# Asegurar que Python encuentre el módulo "app"
 export PYTHONPATH="${BACKEND_DIR}:${PYTHONPATH:-}"
-# Render inyecta PORT; no definir PORT en Environment Variables
 PORT="${PORT:-10000}"
-exec uvicorn app.main:app --host 0.0.0.0 --port "$PORT"
+# python -m para que use el intérprete con PYTHONPATH correcto
+exec python -m uvicorn app.main:app --host 0.0.0.0 --port "$PORT"

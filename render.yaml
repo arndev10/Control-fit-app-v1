@@ -1,0 +1,12 @@
+# Render: backend FastAPI (raíz del repo; el frontend va en Vercel)
+# https://docs.render.com/blueprint-spec
+services:
+  - type: web
+    runtime: python
+    name: control-fit-api
+    buildCommand: pip install -r requirements.txt
+    startCommand: bash run_backend.sh
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12"
+    # No rootDir: se usa la raíz para que existan backend/ y run_backend.sh
