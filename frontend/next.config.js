@@ -2,7 +2,12 @@
 const nextConfig = {
   reactStrictMode: true,
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
+    // En producción usar Render si Vercel no inyecta la variable
+    NEXT_PUBLIC_API_URL:
+      process.env.NEXT_PUBLIC_API_URL ||
+      (process.env.NODE_ENV === 'production'
+        ? 'https://control-fit-app-v1-1.onrender.com'
+        : 'http://localhost:8000'),
   },
 }
 

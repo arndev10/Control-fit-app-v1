@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { authApi } from '@/lib/api'
+import { authApi, getApiUrl } from '@/lib/api'
 import { useRouter } from 'next/navigation'
 import Layout from '@/components/Layout'
 
@@ -32,7 +32,12 @@ export default function RegisterPage() {
       // Network errors (only if there's no response from server)
       if (!err.response) {
         if (err.code === 'ECONNREFUSED' || err.code === 'ERR_NETWORK' || err.message?.includes('Network Error') || err.message?.includes('Failed to fetch')) {
-          errorMessage = 'No se pudo conectar al servidor. Verifica que el backend esté corriendo en http://localhost:8001'
+          const apiUrl = getApiUrl()
+          if (apiUrl.startsWith('http://localhost')) {
+            errorMessage = `No se pudo conectar. La app está usando: ${apiUrl}. Haz Redeploy en Vercel (sin caché) para usar el backend en Render.`
+          } else {
+            errorMessage = `No se pudo conectar al backend (${apiUrl}). Comprueba: 1) En Render, variable CORS_ORIGINS = URL de tu app en Vercel. 2) Abre ${apiUrl} en otra pestaña para activar el servidor (plan Free se duerme).`
+          }
         } else if (err.code === 'ERR_INTERNET_DISCONNECTED' || !navigator.onLine) {
           errorMessage = 'Sin conexión a internet'
         } else {

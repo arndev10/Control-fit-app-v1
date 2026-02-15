@@ -1,6 +1,15 @@
 import axios from 'axios'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+// En producción (Vercel) usar Render si la variable no está inyectada
+const DEFAULT_PRODUCTION_API = 'https://control-fit-app-v1-1.onrender.com'
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (process.env.NODE_ENV === 'production' ? DEFAULT_PRODUCTION_API : 'http://localhost:8000')
+
+/** URL del backend (para depuración y mensajes de error) */
+export function getApiUrl(): string {
+  return API_URL
+}
 
 // Helper function to extract error message from FastAPI error response
 export const getErrorMessage = (error: any): string => {

@@ -58,11 +58,18 @@ app = FastAPI(
 )
 
 # Configure CORS (cors_origins desde .env en producción, ej. CORS_ORIGINS=https://tu-app.vercel.app)
-origins = [o.strip() for o in settings.cors_origins.split(",") if o.strip()]
+# Para probar si el fallo es CORS: en Render pon CORS_ORIGINS=* (luego vuelve a poner tu URL de Vercel)
+_raw = [o.strip() for o in settings.cors_origins.split(",") if o.strip()]
+if "*" in _raw and len(_raw) == 1:
+    origins = ["*"]
+    allow_creds = False
+else:
+    origins = _raw
+    allow_creds = True
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_credentials=True,
+    allow_credentials=allow_creds,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
     expose_headers=["*"],
